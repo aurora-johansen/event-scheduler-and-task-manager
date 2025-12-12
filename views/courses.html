@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h1>Your Courses</h1>
+
+<div class="task-layout">
+    <section class="task-list">
+        <h2>Course List</h2>
+
+        <table class="course-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Professor</th>
+                    <th>Day</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if courses and courses.length %}
+                {% for course in courses %}
+                <tr>
+                    <td>{{ course.name }}</td>
+                    <td>{{ course.professor or '-' }}</td>
+                    <td>
+                        {% if course.day_of_week is not null %}
+                        {{ ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][course.day_of_week] }}
+                        {% else %}
+                        -
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if course.start_time and course.end_time %}
+                        {{ course.start_time }} - {{ course.end_time }}
+                        {% else %}
+                        -
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="4" class="text-muted">No courses registered.</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </section>
+
+    <section class="task-form">
+        <h2>Add Course</h2>
+
+        <form method="POST" action="/courses">
+            <label>Course name</label>
+            <input type="text" name="name" required />
+
+            <label>Professor</label>
+            <input type="text" name="professor" />
+
+            <label>Day of week (0 = Sun ... 6 = Sat)</label>
+            <input type="number" min="0" max="6" name="day_of_week" />
+
+            <label>Start time</label>
+            <input type="time" name="start_time" />
+
+            <label>End time</label>
+            <input type="time" name="end_time" />
+
+            <button type="submit">Add Course</button>
+        </form>
+    </section>
+</div>
+{% endblock %}

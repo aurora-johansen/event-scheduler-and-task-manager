@@ -10,6 +10,10 @@ const passport = require('passport');
 const authRouter = require('./routes/auth');
 const pageRouter = require('./routes/page');
 const eventsRouter = require('./routes/events');
+const taskRoutes = require('./routes/tasks');
+const courseRoutes = require('./routes/courses');
+const apiTaskRoutes = require('./routes/apiTasks');
+const apiTimetableRoutes = require('./routes/apiTimetable');
 
 const app = express();
 const nunjucks = require('nunjucks');
@@ -45,6 +49,11 @@ app.use(passport.session());
 app.use('/auth', authRouter);
 app.use('/', pageRouter);
 app.use('/events', eventsRouter);
+app.use('/tasks', taskRoutes);
+app.use('/courses', courseRoutes);
+app.use('/api/tasks', apiTaskRoutes);
+app.use('/api/timetable', apiTimetableRoutes);
+
 
 app.get('/', (req, res) => {
     res.send('Event Scheduler: server is running');

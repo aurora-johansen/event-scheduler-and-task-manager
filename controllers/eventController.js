@@ -1,4 +1,6 @@
 const pool = require('../config/db');
+const Event = require('../models/Event');
+
 
 // CREATE EVENT
 exports.createEvent = async (req, res) => {
@@ -6,18 +8,13 @@ exports.createEvent = async (req, res) => {
     const userId = req.user.id;
 
     try {
-        await pool.query(
-            `INSERT INTO events (title, description, start_time, end_time, is_public, user_id)
-             VALUES (?, ?, ?, ?, ?, ?)`,
-            [
-                title,
-                description,
-                start_time,
-                end_time,
-                is_public ? 1 : 0,
-                userId
-            ]
-        );
+        await Event.createEvent(userId, {
+            title,
+            description,
+            start_time,
+            end_time,
+            is_public
+        });
 
         return res.redirect('/events');
     } catch (err) {
@@ -26,8 +23,11 @@ exports.createEvent = async (req, res) => {
     }
 };
 
+
 // GET EVENTS FOR LOGGED-IN USER
 exports.getUserEvents = async (req, res) => {
+    const userId = req.user.id;
+
     function formatDate(date) {
         return new Date(date).toLocaleString("en-GB", {
             year: "numeric",
@@ -38,13 +38,9 @@ exports.getUserEvents = async (req, res) => {
         });
     }
 
-    const userId = req.user.id;
-
     try {
-        const [events] = await pool.query(
-            `SELECT * FROM events where user_id = ? ORDER BY start_time ASC`,
-            [userId]
-        );
+        const events = await Event.getEventsByUserId(userId);
+
         const formattedEvents = events.map(event => ({
             ...event,
             start_time: formatDate(event.start_time),
@@ -63,12 +59,13 @@ exports.getUserEvents = async (req, res) => {
     }
 };
 
+
 // DELETE EVENT
 exports.deleteEvent = async (req, res) => {
     const eventId = req.params.id;
 
     try {
-        await pool.query("DELETE FROM events WHERE id = ?", [eventId]);
+        await Event.deleteEvent(eventId, req.user.id);
         return res.redirect('/events');
     } catch (err) {
         console.error(err);
@@ -82,17 +79,15 @@ exports.getEventById = async (req, res) => {
     const eventId = req.params.id;
 
     try {
-        const [rows] = await pool.query(
-            "SELECT * FROM events WHERE id = ?",
-            [eventId]
-        );
+        const records = await Event.getEventsByUserId(req.user.id);
+        const event = records.find(e => e.id == eventId);
 
-        if (rows.length === 0) return res.status(404).send("Event not found");
+        if (!event) return res.status(404).send("Event not found");
 
         res.render('editEvent.html', {
             title: "Edit Event",
             user: req.user,
-            event: rows[0]
+            event
         });
 
     } catch (err) {
@@ -108,20 +103,13 @@ exports.updateEvent = async (req, res) => {
     const { title, description, start_time, end_time, is_public } = req.body;
 
     try {
-
-        await pool.query(
-            `UPDATE events
-            SET title = ?, description = ?, start_time = ?, end_time = ?, is_public = ?
-            WHERE id = ?`,
-            [
-                title,
-                description,
-                start_time,
-                end_time,
-                is_public ? 1 : 0,
-                eventId
-            ]
-        );
+        await Event.updateEvent(eventId, req.user.id, {
+            title,
+            description,
+            start_time,
+            end_time,
+            is_public
+        });
 
         return res.redirect('/events');
 

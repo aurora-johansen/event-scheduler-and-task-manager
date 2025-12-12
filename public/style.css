@@ -153,3 +153,42 @@ a:visited {
 .btn-secondary:hover {
     background: #5a6268;
 }
+
+.task-layout {
+    display: grid;
+    grid-template-columns: 2fr 1.2fr;
+    gap: 20px;
+}
+
+.task-list h2,
+.task-form h2 {
+    margin-top: 0;
+}
+
+.course-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.course-table th,
+.course-table td {
+    border: 1px solid #eee;
+    padding: 8px;
+}
+
+.course-table th {
+    text-align: left;
+}
+
+.badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 999px;
+    font-size: 12px;
+    background: #eee;
+}
+
+.small-text {
+    font-size: 13px;
+    color: #666;
+}

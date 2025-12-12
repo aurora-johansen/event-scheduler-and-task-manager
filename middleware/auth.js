@@ -1,15 +1,26 @@
 exports.isLoggedIn = (req, res, next) => {
-    if (req.isAuthenticated()) {
-        // Passport legger til req.isAuthenticated()
+    if (req.isAuthenticated && req.isAuthenticated()) {
         return next();
     }
-    return res.status(401).json({ message: "You must be logged in to access this resource." });
-
+    return res.redirect('/auth/login');
+};
+exports.isNotLoggedIn = (req, res, next) => {
+    if (!req.isAuthenticated || !req.isAuthenticated()) {
+        return next();
+    }
+    return res.redirect('/dashboard');
 };
 
-exports.isNotLoggedIn = (req, res, next) => {
-    if (!req.isAuthenticated()) {
+exports.ensureAuthenticatedApi = (req, res, next) => {
+    if (req.isAuthenticated && req.isAuthenticated()) {
         return next();
     }
-    return res.status(403).json({ message: "You are already logged in." });
+    return res.status(401).json({ error: 'Unauthorized' });
+};
+
+exports.ensureAuthenticated = (req, res, next) => {
+    if (req.isAuthenticated && req.isAuthenticated()) {
+        return next();
+    }
+    return res.redirect('/auth/login');
 };
