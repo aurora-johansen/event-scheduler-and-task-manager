@@ -2,28 +2,25 @@
 
 {% block content %}
 <h1>Welcome, {{ user.name }}!</h1>
-<p>Your email: {{ user.email }}</p>
 
-<hr>
+<h2>Today's Tasks</h2>
 
-<h2>Today’s Tasks</h2>
 {% if todayTasks and todayTasks.length %}
 {% for task in todayTasks %}
 <div class="event-item">
     <strong>{{ task.title }}</strong>
-    {% if task.course_name %}
-    <span class="badge">{{ task.course_name }}</span>
-    {% endif %}
     <div class="small-text">
-        Priority: {{ task.priority }} | Status: {{ task.status }}
+        Priority: {{ task.priority }} |
+        Status: {{ task.status }}
     </div>
 </div>
 {% endfor %}
 {% else %}
 <p class="text-muted">No tasks due today</p>
-
 {% endif %}
 
-<a href="/events">Go to events</a> ·
-<a href="/tasks">Go to tasks</a>
+<br>
+
+<a href="/tasks">Go to tasks</a> ·
+<a href="/events">Go to events</a>
 {% endblock %}
