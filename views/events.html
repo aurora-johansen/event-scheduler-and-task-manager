@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h1>Your Events</h1>
+
+<a href="/events/new">Create New Event</a>
+
+{% if events.length === 0 %}
+<p>You have no events yet.</p>
+{% else %}
+<ul>
+    {% for event in events %}
+    <div class="event-item">
+        <strong>{{ event.title }}</strong><br>
+        {{ event.start_time }} → {{ event.end_time }}<br>
+        {{ event.description }}<br>
+
+        <div class="event-buttons">
+            <a href="/events/edit/{{ event.id }}">Edit</a>
+
+            <form action="/events/delete/{{ event.id }}" method="POST" style="display:inline;">
+                <button class="delete-btn" type="submit">Delete</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

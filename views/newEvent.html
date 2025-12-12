@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h1>Create New Event</h1>
+
+<form action="/events/create" method="POST">
+    <label>Title:</label><br>
+    <input type="text" name="title" required><br><br>
+
+    <label>Description:</label><br>
+    <textarea name="description"></textarea><br><br>
+
+    <label>Start Time:</label><br>
+    <input type="datetime-local" name="start_time" required><br><br>
+
+    <label>End Time:</label><br>
+    <input type="datetime-local" name="end_time" required><br><br>
+
+    <label>Public Event?</label>
+    <input type="checkbox" name="is_public" value="1"><br><br>
+
+    <button type="submit">Create Event</button>
+</form>
+
+{% if message %}
+<p style="color:red">{{ message }}</p>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h1>Edit Event</h1>
+
+<form action="/events/update/{{ event.id }}" method="POST">
+    <label>Title:</label><br>
+    <input type="text" name="title" value="{{ event.title }}" required><br><br>
+
+    <label>Description:</label><br>
+    <textarea name="description">{{ event.description }}</textarea><br><br>
+
+    <label>Start Time:</label><br>
+    <input type="datetime-local" name="start_time" value="{{ event.start_time }}" required><br><br>
+
+    <label>End Time:</label><br>
+    <input type="datetime-local" name="end_time" value="{{ event.end_time }}" required><br><br>
+
+    <label>Public Event?</label>
+    <input type="checkbox" name="is_public" value="1" {% if event.is_public==1 %}checked{% endif %}><br><br>
+
+    <button type="submit">Save Changes</button>
+</form>
+
+{% endblock %}
