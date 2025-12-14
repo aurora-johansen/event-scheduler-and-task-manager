@@ -139,7 +139,7 @@ DB_NAME=your-database-name
 
 설치 및 실행 방법
 ```
-git clone https://github.com/AuroraJohansen/event-scheduler-and-task-manager.git
+git clone https://github.com/aurora-johansen/event-scheduler-and-task-manager.git
 cd event-scheduler-and-task-manager
 npm install
 npm start
